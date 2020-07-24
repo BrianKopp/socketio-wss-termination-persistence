@@ -14,9 +14,9 @@ const ioServer = setupSocketIO(server);
 const shutdown = () => {
     const initialSleep = 2;
     console.log(`received shutdown signal, sleeping for ${initialSleep} seconds before closing server`);
-    ioServer.emit('message', { data: 'SIG signal received, preparing to shut down' });
+    ioServer.emit('message', { message: 'SIG signal received, preparing to shut down' });
     setTimeout(() => {
-        ioServer.emit('message', { data: 'closing server' });
+        ioServer.emit('message', { message: 'closing server' });
         console.log('shutting down server');
         ioServer.close();
         process.exit(0);

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socketio-hooks
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: socketio-hooks
+  template:
+    metadata:
+      labels:
+        app: socketio-hooks
+    spec:
+      containers:
+      - name: socketiohooks
+        image: briankopp/socketio-wss-termination-persistance:0.0.5
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 10"]
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 20"]
+      terminationGracePeriodSeconds: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socketio-hooks
+  namespace: default
+spec:
+  selector:
+    app: socketio-hooks
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30300 # hardcode this for happiness
