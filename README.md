@@ -16,6 +16,23 @@ npm run start
 
 Open a browser to `http://localhost:3000`.
 
+## Running with Minikube
+
+```sh
+minikube start
+kubectl apply -f ./deploy/startstop.yaml
+minikube service socketio-hooks --url # prints the url for you to hit from your browser
+```
+
+Change something trivial like the pod resource cpu request and
+rerun `kubectl apply -f ./deploy/startstop.yaml` to force a rollout.
+
+Useful command for watching pods;
+
+```sh
+while true; do kubectl get pods ; echo "" ; sleep 1 ; done
+```
+
 ## Strategies
 
 There are a few possible ways to handle this. We'll give these a shot.
