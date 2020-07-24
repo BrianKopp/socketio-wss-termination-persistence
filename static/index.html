@@ -15,7 +15,7 @@
         messages.appendChild(elem);
       }
 
-      var socket = io('localhost:3000');
+      var socket = io();
       socket.on('message', function(data) {
         addMessage(data.message);
       });

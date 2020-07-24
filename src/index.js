@@ -16,7 +16,7 @@ const shutdown = () => {
     console.log(`received shutdown signal, sleeping for ${initialSleep} seconds before closing server`);
     setTimeout(() => {
         console.log('shutting down server');
-        ioServer.close((err) => {
+        server.close((err) => {
             if (err) {
                 console.error('error shutting down server', err);
                 process.exit(1);
