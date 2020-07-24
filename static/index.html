@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>Messages</h1>
+    <ul id="messages"></ul>
+    <script>
+      function addMessage(message) {
+        var text = document.createTextNode(`${Date.now()} - ${message}`);
+        var elem = document.createElement('li');
+        var ul = document.getElementById('messages');
+        elem.appendChild(text);
+        messages.appendChild(elem);
+      }
+
+      var socket = io('localhost:3000');
+      socket.on('message', function(data) {
+        addMessage(data.message);
+      });
+      socket.on('connect', function() {
+        addMessage('connect');
+      });
+      socket.on('connect_error', function() {
+        addMessage('connect_error');
+      });
+      socket.on('disconnect', function(reason) {
+        addMessage(`disconnect reason - ${reason}`);
+      });
+      socket.on('reconnect_attempt', function(attemptNumber) {
+        addMessage(`reconnect_attempt num - ${attemptNumber}`);
+      });
+      socket.on('reconnect', function(attemptNumber) {
+        addMessage(`reconnect on attempt ${attemptNumber}`);
+      });
+      socket.on('reconnecting', function() {
+        addMessage('reconnecting');
+      });
+      socket.on('reconnect_error', function(err) {
+        addMessage('error reconnecting');
+        console.error(err);
+      });
+      socket.on('reconnect_failed', function() {
+        addMessage('reconnect_failed');
+      });
+      socket.on('ping', () => {
+        addMessage('ping');
+      });
+      socket.on('pong', function(lat) {
+        addMessage(`pong ${lat} ms`);
+      });
+      socket.on('error', console.error.bind(console));
+    </script>
+  </body>
+</html>
